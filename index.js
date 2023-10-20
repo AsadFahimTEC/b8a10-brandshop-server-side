@@ -23,11 +23,11 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const brandCollection = client.db("productsDB").collection("brands");
     const productCollection = client.db("productsDB").collection("products");
 
-    // brandRoures
+    // brandRoutes
 
     app.get("/brands/:brandId", async (req, res) => {
       const {brandId} = req.params;
@@ -53,11 +53,12 @@ async function run() {
     });
 
     // products routes
-    app.put("/products/:id", async (req, res) => {
+    app.patch("/products/:id", async (req, res) => {
       const id = req.params.id;
       const filter = {_id: new ObjectId(id)};
-      const options = {upsert: false};
-      const updatedProduct = req.body;
+      // // const options = {upsert: true};
+      // const updatedProduct = req.body;
+      console.log(updatedProduct)
       const product = {
         $set: {
           name: updatedProduct.name,
@@ -71,7 +72,7 @@ async function run() {
       const result = await productCollection.updateOne(
         filter,
         product,
-        options
+        // options
       );
       res.send(result);
     });
